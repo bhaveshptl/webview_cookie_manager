@@ -124,10 +124,10 @@ public class WebviewCookieManagerPlugin implements FlutterPlugin, MethodCallHand
 
         for (Map<String, Object> cookieMap : serializedCookies) {
             Object origin = cookieMap.get("origin");
-            String domainString = origin instanceof String ? (String)origin : null;
+            String domainString = origin instanceof String ? (String) origin : null;
             if (domainString == null) {
                 Object domain = cookieMap.get("domain");
-                domainString = domain instanceof String ? (String)domain : "";
+                domainString = domain instanceof String ? (String) domain : "";
             }
             final String value = cookieMap.get("asString").toString();
             cookieManager.setCookie(domainString, value);
@@ -176,7 +176,9 @@ public class WebviewCookieManagerPlugin implements FlutterPlugin, MethodCallHand
                 getCookies(methodCall, result);
                 break;
             case "setCookies":
-                setCookies(methodCall, result);
+                new Thread(() -> {
+                    setCookies(methodCall, result);
+                }).start();
                 break;
             default:
                 result.notImplemented();
